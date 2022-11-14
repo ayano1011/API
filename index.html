@@ -40,9 +40,13 @@
         <p><input type="text" id="from" value="博多駅"> <button id="get">検索</button></p>
     </header>
     <div id="main">
-        <div id="myMap" style='width:90%;height:70%;'></div>
+        <div id="myMap" style='width:90%;height:90%;'></div>
     </div>
-    <div id="output_nearest"></div>
+    <div id="output">
+        <div id="output_nearest">
+        </div>
+        <button id="intomap">OK</button>
+    </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <!--BingMAPのAPIkey-->
     <script
@@ -72,14 +76,13 @@
         function GetMap() {
             //Map生成
             map = new Microsoft.Maps.Map('#myMap', {
-                zoom: 15,
+                zoom: 10,
                 mapTypeId: Microsoft.Maps.MapTypeId.aerial
             });
 
 
 
             const location0 = new Microsoft.Maps.Location(address[0].lat, address[0].lng);
-            console.log(address[0].lat);
             const pin0 = new Microsoft.Maps.Pushpin(location0, {
                 color: "pink",
                 visible: true,
@@ -87,7 +90,6 @@
             map.entities.push(pin0);
 
             const location1 = new Microsoft.Maps.Location(address[1].lat, address[1].lng);
-            console.log(address[0].lat);
             const pin1 = new Microsoft.Maps.Pushpin(location1, {
                 color: "pink",
                 visible: true,
@@ -95,7 +97,6 @@
             map.entities.push(pin1);
 
             const location2 = new Microsoft.Maps.Location(address[2].lat, address[2].lng);
-            console.log(address[0].lat);
             const pin2 = new Microsoft.Maps.Pushpin(location2, {
                 color: "pink",
                 visible: true,
@@ -175,7 +176,28 @@
 
                             // 最も近い場所の病院名を表示
                             console.log(nearestname[nearestname.length - 1]);
-                            $("#output_neares").text(nearestname[nearestname.length - 1].name);
+                            $("#output_nearest").text(nearestname[nearestname.length - 1].name);
+                            $("#intomap").on("click", function () {
+                                // console.log("ぱにゃん");
+
+                                const themap = new Microsoft.Maps.Map('#myMap', {
+                                    center: new Microsoft.Maps.Location(nearestname[nearestname.length - 1].lat, nearestname[nearestname.length - 1].lng), //Location center position
+                                    zoom: 15,
+                                    mapTypeId: Microsoft.Maps.MapTypeId.aerial
+
+                                });
+                                let center = themap.getCenter();
+
+                                let thepin = new Microsoft.Maps.Pushpin(center, {
+                                    color: "pink",
+                                    visible: true,
+                                });
+                                themap.entities.push(thepin);
+
+
+
+                            });
+
 
 
 
