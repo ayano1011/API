@@ -23,3 +23,20 @@
        color: white;
        height: 50px;
    }
+
+   #output_text {
+       display: flex;
+   }
+
+   #km {
+       display: flex;
+
+   }
+
+   #output_km {
+       color: aquamarine;
+   }
+
+   #text_km {
+       color: black;
+   }

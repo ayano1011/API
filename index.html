@@ -43,9 +43,16 @@
         <div id="myMap" style='width:90%;height:90%;'></div>
     </div>
     <div id="output">
-        <div id="output_nearest">
+        <div id="output_text">
+            <div id="output_nearest">
+            </div>
+            <button id="intomap">MAP上で表示</button>
         </div>
-        <button id="intomap">OK</button>
+        <div id="km">
+            <div>距離約</div>
+            <div id="output_km"></div>
+            <div id="text_km">km</div>
+        </div>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <!--BingMAPのAPIkey-->
@@ -71,6 +78,63 @@
                 lng: "130.735914",
                 name: "水前寺公園ペットクリニック内うさぎの病院"
             },
+            {
+                lat: "33.843312",
+                lng: "130.935552",
+                name: "あゆとも動物病院"
+            },
+            {
+                lat: "33.903087",
+                lng: "130.805655",
+                name: "今村動物ケアクリニック"
+            },
+            {
+                lat: "33.320669",
+                lng: "130.560846",
+                name: "高尾動物病院"
+            },
+            {
+                lat: "33.784352",
+                lng: "130.581176",
+                name: "たぢか動物病院"
+            },
+            {
+                lat: "33.501252",
+                lng: "130.486665",
+                name: "総合動物病院ユニベッツ福岡"
+            },
+            {
+                lat: "33.568145",
+                lng: "130.439397",
+                name: "バーツ動物病院"
+            },
+            {
+                lat: "33.538256",
+                lng: "130.469416",
+                name: "ファミリア動物病院"
+            },
+            {
+                lat: "33.575651",
+                lng: "130.34668",
+                name: "ふじさき動物病院"
+            },
+            {
+                lat: "33.605081",
+                lng: "130.427816",
+                name: "吉塚ペットクリニック"
+            },
+            {
+                lat: "33.727386",
+                lng: "130.965905",
+                name: "よつば動物医療センター"
+            },
+
+            {
+                lat: "32.779636",
+                lng: "129.951888",
+                name: "鳥と小動物の診療所"
+            },
+
 
         ];
         function GetMap() {
@@ -102,6 +166,49 @@
                 visible: true,
             });
             map.entities.push(pin2);
+
+            const location3 = new Microsoft.Maps.Location(address[3].lat, address[3].lng);
+            const pin3 = new Microsoft.Maps.Pushpin(location3, {
+                color: "pink",
+                visible: true,
+            });
+            map.entities.push(pin3);
+
+            const location4 = new Microsoft.Maps.Location(address[4].lat, address[4].lng);
+            const pin4 = new Microsoft.Maps.Pushpin(location4, {
+                color: "pink",
+                visible: true,
+            });
+            map.entities.push(pin4);
+
+            const location5 = new Microsoft.Maps.Location(address[5].lat, address[5].lng);
+            const pin5 = new Microsoft.Maps.Pushpin(location5, {
+                color: "pink",
+                visible: true,
+            });
+            map.entities.push(pin5);
+
+
+            const location6 = new Microsoft.Maps.Location(address[6].lat, address[6].lng);
+            const pin6 = new Microsoft.Maps.Pushpin(location6, {
+                color: "pink",
+                visible: true,
+            });
+            map.entities.push(pin6);
+
+            const location7 = new Microsoft.Maps.Location(address[7].lat, address[7].lng);
+            const pin7 = new Microsoft.Maps.Pushpin(location7, {
+                color: "pink",
+                visible: true,
+            });
+            map.entities.push(pin7);
+
+            const location8 = new Microsoft.Maps.Location(address[8].lat, address[8].lng);
+            const pin8 = new Microsoft.Maps.Pushpin(location8, {
+                color: "pink",
+                visible: true,
+            });
+            map.entities.push(pin8);
 
 
             //検索モジュール指定
@@ -155,7 +262,7 @@
                                 lng2 *= R;
                                 return Math.floor(6371 * Math.acos(Math.cos(lat1) * Math.cos(lat2) * Math.cos(lng2 - lng1) + Math.sin(lat1) * Math.sin(lat2)));
                             }
-                            for (let i = 0; i < 3; i++) {
+                            for (let i = 0; i < 14; i++) {
                                 distance(r.results[0].location.latitude, r.results[0].location.longitude, address[i].lat, address[i].lng);
                                 distances.push(distance(r.results[0].location.latitude, r.results[0].location.longitude, address[i].lat, address[i].lng));
                                 // console.log(distance(r.results[0].location.latitude, r.results[0].location.longitude, address[i].lat, address[i].lng));
@@ -177,6 +284,8 @@
                             // 最も近い場所の病院名を表示
                             console.log(nearestname[nearestname.length - 1]);
                             $("#output_nearest").text(nearestname[nearestname.length - 1].name);
+                            $("#output_km").text(distances[0]);
+
                             $("#intomap").on("click", function () {
                                 // console.log("ぱにゃん");
 
@@ -193,6 +302,13 @@
                                     visible: true,
                                 });
                                 themap.entities.push(thepin);
+
+                                let infobox = new Microsoft.Maps.Infobox(center, {
+                                    title: nearestname[nearestname.length - 1].name,
+
+                                });
+                                infobox.setMap(themap);
+
 
 
 
