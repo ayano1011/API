@@ -1,0 +1,25 @@
+   #main {
+       height: 90%;
+   }
+
+   body {
+       padding: 0;
+       margin: 0;
+       background: gainsboro;
+   }
+
+   h1 {
+       padding: 0;
+       margin: 0;
+       font-size: 100%;
+       color: white;
+   }
+
+   p {
+       margin: 0
+   }
+
+   #output_nearest {
+       color: white;
+       height: 50px;
+   }

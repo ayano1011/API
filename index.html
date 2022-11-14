@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAP</title>
+    <link rel="stylesheet" href="/main.css">
+    <style>
+        html,
+        body,
+        #main {
+            height: 90%;
+        }
+
+        body {
+            padding: 0;
+            margin: 0;
+            background: #333;
+        }
+
+        h1 {
+            padding: 0;
+            margin: 0;
+            font-size: 100%;
+            color: white;
+        }
+
+        p {
+            margin: 0
+        }
+    </style>
+
+</head>
+
+<body>
+    <header>
+        <h1 id="h1">BingMaps GO! (住所検索 → 緯度経度取得）</h1>
+        <p><input type="text" id="from" value="博多駅"> <button id="get">検索</button></p>
+    </header>
+    <div id="main">
+        <div id="myMap" style='width:90%;height:70%;'></div>
+    </div>
+    <div id="output_nearest"></div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!--BingMAPのAPIkey-->
+    <script
+        src="https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=AsB_Kj1w_4gKokyM2cCE0JkDdGdvX9s2QMTiZ87bCAR6XFnrhG4SBG0t7rnGqSGF"
+        async defer></script>
+    <script>
+        let map;             //MapObject用
+        let searchManager;   //SearchObject用
+        const address = [
+            {
+                lat: "33.846223",
+                lng: "130.761723",
+                name: "小泉ネスト動物病院"
+            },
+            {
+                lat: "33.591092",
+                lng: "130.386515",
+                name: "みなとおおほり動物病院"
+            },
+            {
+                lat: "32.787355",
+                lng: "130.735914",
+                name: "水前寺公園ペットクリニック内うさぎの病院"
+            },
+
+        ];
+        function GetMap() {
+            //Map生成
+            map = new Microsoft.Maps.Map('#myMap', {
+                zoom: 15,
+                mapTypeId: Microsoft.Maps.MapTypeId.aerial
+            });
+
+
+
+            const location0 = new Microsoft.Maps.Location(address[0].lat, address[0].lng);
+            console.log(address[0].lat);
+            const pin0 = new Microsoft.Maps.Pushpin(location0, {
+                color: "pink",
+                visible: true,
+            });
+            map.entities.push(pin0);
+
+            const location1 = new Microsoft.Maps.Location(address[1].lat, address[1].lng);
+            console.log(address[0].lat);
+            const pin1 = new Microsoft.Maps.Pushpin(location1, {
+                color: "pink",
+                visible: true,
+            });
+            map.entities.push(pin1);
+
+            const location2 = new Microsoft.Maps.Location(address[2].lat, address[2].lng);
+            console.log(address[0].lat);
+            const pin2 = new Microsoft.Maps.Pushpin(location2, {
+                color: "pink",
+                visible: true,
+            });
+            map.entities.push(pin2);
+
+
+            //検索モジュール指定
+            Microsoft.Maps.loadModule('Microsoft.Maps.Search', function () {
+                //searchManagerインスタンス化（Geocode,ReverseGeocodeが使用可能になる）
+                searchManager = new Microsoft.Maps.Search.SearchManager(map);
+                //Geocode：住所から検索
+                geocodeQuery(document.getElementById("from").value);
+            });
+        }
+
+
+        /**
+         * 検索ボタン[Click:Event]
+         */
+        document.getElementById("get").onclick = function () {
+            //4.Geocode:住所から検索
+            geocodeQuery(document.getElementById("from").value);
+        };
+
+        /**
+         * 住所から緯度経度を取得
+         * @param query [住所文字列]
+         */
+        function geocodeQuery(query) {
+            if (searchManager) {
+                //住所から緯度経度を検索
+                searchManager.geocode({
+                    where: query,       //検索文字列
+                    callback: function (r) { //検索結果を"( r )" の変数で取得
+                        //最初の検索取得結果をMAPに表示
+                        if (r && r.results && r.results.length > 0) {
+                            //Pushpinを立てる
+                            const pin = new Microsoft.Maps.Pushpin(r.results[0].location);
+                            map.entities.push(pin);
+                            //map表示位置を再設定
+                            map.setView({ bounds: r.results[0].bestView });
+                            //取得た緯度経度をh1要素にJSON文字列にして表示
+                            console.log(r.results[0].location);
+                            console.log(r.results[0].location.latitude);
+                            document.getElementById("h1").innerText = JSON.stringify(r.results[0].location);
+
+                            // 検索結果と病院との距離を計算
+                            const R = Math.PI / 180;
+                            const distances = [];
+                            const nearestname = [];
+                            function distance(lat1, lng1, lat2, lng2) {
+                                lat1 *= R;
+                                lng1 *= R;
+                                lat2 *= R;
+                                lng2 *= R;
+                                return Math.floor(6371 * Math.acos(Math.cos(lat1) * Math.cos(lat2) * Math.cos(lng2 - lng1) + Math.sin(lat1) * Math.sin(lat2)));
+                            }
+                            for (let i = 0; i < 3; i++) {
+                                distance(r.results[0].location.latitude, r.results[0].location.longitude, address[i].lat, address[i].lng);
+                                distances.push(distance(r.results[0].location.latitude, r.results[0].location.longitude, address[i].lat, address[i].lng));
+                                // console.log(distance(r.results[0].location.latitude, r.results[0].location.longitude, address[i].lat, address[i].lng));
+                                // console.log(distances);
+                                // 距離が近い順に並べ替える
+                                function compareFunc(a, b) {
+                                    return a - b;
+                                }
+
+                                distances.sort(compareFunc);
+                                if (distances[0] - distance(r.results[0].location.latitude, r.results[0].location.longitude, address[i].lat, address[i].lng) === 0) {
+                                    console.log(address[i])
+                                    nearestname.push(address[i]);
+
+                                }
+                            }
+                            console.log(nearestname);
+
+                            // 最も近い場所の病院名を表示
+                            console.log(nearestname[nearestname.length - 1]);
+                            $("#output_neares").text(nearestname[nearestname.length - 1].name);
+
+
+
+                            // if (distances.length == 3) {
+                            //     for (let x = 0; x < 3; x++) {
+                            //         distance(r.results[0].location.latitude, r.results[0].location.longitude, address[x].lat, address[x].lng);
+                            //     };
+                            //     if (distances[0] - distance(r.results[0].location.latitude, r.results[0].location.longitude, address[x].lat, address[x].lng) === 0) {
+                            //         console.log(address[x].name)
+                            //     }
+
+
+                            //     // console.log(distances);
+                            // }
+
+                        }
+                    },
+                    errorCallback: function (e) {
+                        alert("見つかりません");
+                    }
+
+                });
+            }
+        }
+
+
+    </script>
+
+</body>
+
+</html>
