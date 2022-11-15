@@ -1,25 +1,89 @@
-   #main {
-       height: 90%;
-   }
+  body {
+      padding: 0;
+      margin: 0 auto;
+      background: gainsboro;
+  }
 
-   body {
-       padding: 0;
-       margin: 0;
-       background: gainsboro;
-   }
+  /*  ヘッダーエリア*/
+  h1 {
+      padding: 0;
+      margin-bottom: 32px;
+      font-size: 100%;
+      color: black;
+      font-size: 30px;
+      text-align: center;
 
-   h1 {
-       padding: 0;
-       margin: 0;
-       font-size: 100%;
-       color: white;
-   }
+  }
 
-   p {
-       margin: 0
-   }
+  p {
+      margin: 0;
+      text-align: center;
 
-   #output_nearest {
-       color: white;
-       height: 50px;
-   }
+  }
+
+  /* 「hospital search 」*/
+  h3 {
+      text-align: center;
+      font-family: Arial, Helvetica, sans-serif;
+  }
+
+  #search_area {
+      display: flex;
+      justify-content: center;
+      font-size: 14px;
+  }
+
+  #from {
+      padding: 10px 15px;
+      font-size: 18px;
+      border-radius: 3px;
+      border: 2px solid darkcyan;
+      box-sizing: border-box;
+  }
+
+  #get {
+      background-color: black;
+      color: white;
+      font-weight: bold;
+      height: 40px;
+  }
+
+  #line {
+      border-bottom: 2px solid darkcyan;
+      margin-top: 10px;
+      margin-bottom: 10px;
+  }
+
+  #output_nearest {
+      color: black;
+      height: 50px;
+      font-size: 24px;
+  }
+
+  #output_text {
+      display: flex;
+      justify-content: center;
+  }
+
+  #km {
+      display: flex;
+      font-size: 22px;
+      justify-content: center;
+
+  }
+
+  #output_km {
+      color: rgb(96, 205, 168);
+      font-weight: bold;
+  }
+
+  #text_km {
+      color: black;
+  }
+
+  #intomap {
+      background-color: rgb(106, 225, 185);
+      color: whitesmoke;
+      font-weight: bold;
+
+  }
