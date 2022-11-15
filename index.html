@@ -7,24 +7,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MAP</title>
     <link rel="stylesheet" href="/main.css">
+    <link href="https://fonts.googleapis.com/css?family=M+PLUS+Rounded+1c" rel="stylesheet">
     <style>
         html,
         body,
         #main {
-            height: 90%;
+            height: 400px;
         }
 
         body {
             padding: 0;
             margin: 0;
-            background: #333;
+            background: gainsboro;
         }
 
         h1 {
             padding: 0;
             margin: 0;
-            font-size: 100%;
-            color: white;
+            font-size: 32px;
+            color: black;
+
+            font-family: "M PLUS Rounded 1c";
         }
 
         p {
@@ -36,13 +39,18 @@
 
 <body>
     <header>
-        <h1 id="h1">BingMaps GO! (住所検索 → 緯度経度取得）</h1>
+        <h1 id="h1">うさぎ対応<br>動物病院マップ</h1>
+        <div id="search_area">
+
+            <h3>住所から最寄りの病院を検索します</h3>
+        </div>
         <p><input type="text" id="from" value="博多駅"> <button id="get">検索</button></p>
     </header>
     <div id="main">
-        <div id="myMap" style='width:90%;height:90%;'></div>
+        <div id="myMap" style='width:100%;height:100%;'></div>
     </div>
     <div id="output">
+        <div id="line"></div>
         <div id="output_text">
             <div id="output_nearest">
             </div>
@@ -56,9 +64,7 @@
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <!--BingMAPのAPIkey-->
-    <script
-        src="https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=AsB_Kj1w_4gKokyM2cCE0JkDdGdvX9s2QMTiZ87bCAR6XFnrhG4SBG0t7rnGqSGF"
-        async defer></script>
+    <script src="https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=" async defer></script>
     <script>
         let map;             //MapObject用
         let searchManager;   //SearchObject用
@@ -249,7 +255,7 @@
                             //取得た緯度経度をh1要素にJSON文字列にして表示
                             console.log(r.results[0].location);
                             console.log(r.results[0].location.latitude);
-                            document.getElementById("h1").innerText = JSON.stringify(r.results[0].location);
+                            // document.getElementById("h1").innerText = JSON.stringify(r.results[0].location);
 
                             // 検索結果と病院との距離を計算
                             const R = Math.PI / 180;
